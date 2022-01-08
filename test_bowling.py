@@ -1,43 +1,45 @@
-from typing import Union
 import unittest
-
 from bowling import Bowling
 
-class BowlingTest(unittest.TestCase):
+class TestBowling(unittest.TestCase):
 
-    def test_bowling(self):
-        self.game == Bowling.Bowling()
-    
+    def setUp(self):
+        self.game = Bowling()
     def test_gutter_game(self):
-        self.rollMany(0, 20)
-        assert self.game.score() == 0
+        self.roll_many(0, 20)
+        self.assertEqual(0, self.game.score())
 
     def test_all_ones(self):
-        self.rollMany(1, 20)
-        assert self.game.score() == 20
-    
+        self.roll_many(1, 20)
+        self.assertEqual(20, self.game.score())
+
     def test_one_spare(self):
-        self.game.roll(5)
-        self.game.roll(5)
+        self.roll_spare()
         self.game.roll(3)
-        self.rollMany(0, 17)
-        assert self.game.score() == 16
-    
+        self.roll_many(0, 17)
+        self.assertEqual(16, self.game.score())
+
     def test_one_strike(self):
         self.game.roll(10)
-        self.game.roll(4)
         self.game.roll(3)
-        self.rollMany(0, 16)
-        assert self.game.score() == 24
-    
+        self.game.roll(4)
+        self.roll_many(0, 16)
+        self.assertEqual(24, self.game.score())
+
     def test_perfect_game(self):
-        self.rollMany(10, 12)
-        assert self.game.score() == 300
-    
-    def test_all_spares(self):
-        self.rollMany(5, 21)
-        assert self.game.score() == 150
-    
-    def test_roll_many(self, pins, rolls):
-        for i in range(rolls):
+        self.roll_many(10, 12)
+        self.assertEqual(300, self.game.score())
+
+    def test_simple_game(self):
+        for pins in [1, 4, 4, 5, 6, 4, 5, 5,
+                    10, 0, 1, 7, 3, 6, 4, 10, 2, 8, 6]:
             self.game.roll(pins)
+        self.assertEqual(133, self.game.score())
+
+    def roll_many(self, pins, num):
+        for i in range(num):
+            self.game.roll(pins)
+
+    def roll_spare(self):
+        self.game.roll(5)
+        self.game.roll(5)
