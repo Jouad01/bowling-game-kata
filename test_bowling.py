@@ -1,45 +1,54 @@
-import unittest
-from bowling import Bowling
+from bowling import *
+import pytest
 
-class TestBowling(unittest.TestCase):
+def test_Strike():
+    assert Strike.add_score() == 0
 
-    def setUp(self):
-        self.game = Bowling()
-    def test_gutter_game(self):
-        self.roll_many(0, 20)
-        self.assertEqual(0, self.game.score())
+def test_Spare():
+    assert Spare.add_score() == 10
 
-    def test_all_ones(self):
-        self.roll_many(1, 20)
-        self.assertEqual(20, self.game.score())
+def test_Gutterball():
+    assert GutterBall.add_score() == 0
 
-    def test_one_spare(self):
-        self.roll_spare()
-        self.game.roll(3)
-        self.roll_many(0, 17)
-        self.assertEqual(16, self.game.score())
+def test_BowlingPins():
+    assert BowlingPins(4).add_score() == 4
+    assert BowlingPins(5).add_score() == 5
+    assert BowlingPins(2).add_score() == 2
+    assert BowlingPins(9).add_score() == 9
+    assert BowlingPins(1).add_score() == 1
+    assert BowlingPins(3).add_score() == 3
 
-    def test_one_strike(self):
-        self.game.roll(10)
-        self.game.roll(3)
-        self.game.roll(4)
-        self.roll_many(0, 16)
-        self.assertEqual(24, self.game.score())
 
-    def test_perfect_game(self):
-        self.roll_many(10, 12)
-        self.assertEqual(300, self.game.score())
+def test_Roll():
+    assert Roll(5).get_score() == 5
+    assert Roll(10).get_score() == 10
+    assert Roll(6).get_score() == 6
+    assert Roll(0).get_score() == 0
 
-    def test_simple_game(self):
-        for pins in [1, 4, 4, 5, 6, 4, 5, 5,
-                    10, 0, 1, 7, 3, 6, 4, 10, 2, 8, 6]:
-            self.game.roll(pins)
-        self.assertEqual(133, self.game.score())
+    assert Roll(BowlingPins(5).add_score()).get_score() == 5
+    # assert Roll(Strike.add_score()).get_score() == 10 --> Fallo
+    assert Roll(BowlingPins(6).add_score()).get_score() == 6
+    assert Roll(GutterBall.add_score()).get_score() == 0
 
-    def roll_many(self, pins, num):
-        for i in range(num):
-            self.game.roll(pins)
 
-    def roll_spare(self):
-        self.game.roll(5)
-        self.game.roll(5)
+def test_Frame():
+    assert Frame(0, 2, False, False).completed() == True
+    assert Frame(0, 2, False, False).completed() == True
+    assert Frame(3, 2, False, False).completed() == True
+    assert Frame(0, 1, False, False).completed() == False
+    assert Frame(10, 1, True, False).completed() == True
+    assert Frame(7, 3, False, True).completed() == True
+    assert Frame(7, 2, False, True).completed() == False
+
+    assert Frame(0, 1, False, False).add_score(10) == 10
+    assert Frame(0, 1, False, False).add_score(0) == 0
+    assert Frame(0, 1, False, False).add_score(6) == 6
+    assert Frame(4, 2, False, False).add_score(6) == 10
+    assert Frame(8, 2, False, False).add_score(0) == 8
+    assert Frame(1, 2, False, False).add_score(6) == 7
+    assert Frame(1, 3, False, True).add_score(6) == 7
+    assert Frame(1, 2, False, True).add_score(6) == 7
+
+    # assert Frame(0, 1, False, False).add_score(Roll(Strike().add_score()).get_score()) == 10 --> Fallo
+    assert Frame(0, 1, False, False).add_score(Roll(GutterBall().add_score()).get_score()) == 0
+    assert Frame(0, 1, False, False).add_score(Roll(BowlingPins(6).add_score()).get_score()) == 6
