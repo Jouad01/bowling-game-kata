@@ -32,22 +32,19 @@ def test_Roll():
 
 
 def test_Frame():
-    assert Frame(0, 2, False, False).completed() == True
-    assert Frame(0, 2, False, False).completed() == True
-    assert Frame(3, 2, False, False).completed() == True
     assert Frame(0, 1, False, False).completed() == False
     assert Frame(10, 1, True, False).completed() == True
     assert Frame(7, 3, False, True).completed() == True
     assert Frame(7, 2, False, True).completed() == False
+    assert Frame(0, 2, False, False).completed() == True
+    assert Frame(3, 2, False, False).completed() == True
 
+    assert Frame(8, 2, False, False).add_score(0) == 8
+    assert Frame(1, 2, False, True).add_score(6) == 7
     assert Frame(0, 1, False, False).add_score(10) == 10
     assert Frame(0, 1, False, False).add_score(0) == 0
     assert Frame(0, 1, False, False).add_score(6) == 6
     assert Frame(4, 2, False, False).add_score(6) == 10
-    assert Frame(8, 2, False, False).add_score(0) == 8
-    assert Frame(1, 2, False, False).add_score(6) == 7
-    assert Frame(1, 3, False, True).add_score(6) == 7
-    assert Frame(1, 2, False, True).add_score(6) == 7
 
     # assert Frame(0, 1, False, False).add_score(Roll(Strike().add_score()).get_score()) == 10 --> Fallo
     assert Frame(0, 1, False, False).add_score(Roll(GutterBall().add_score()).get_score()) == 0
