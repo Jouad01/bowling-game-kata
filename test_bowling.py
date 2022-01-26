@@ -2,7 +2,7 @@ from bowling import *
 import pytest
 
 def test_Strike():
-    assert Strike.add_score() == 0
+    assert Strike.add_score() == 10
 
 def test_Spare():
     assert Spare.add_score() == 10

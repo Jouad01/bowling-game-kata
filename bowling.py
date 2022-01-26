@@ -20,6 +20,13 @@ class Frame:
         self.frame_score += score
         return self.frame_score
 
+class Roll:
+    def __init__(self, roll_score):
+        self.roll_score = roll_score
+    
+    def get_score(self):
+        return self.roll_score
+
 class GutterBall:
         @staticmethod
         def add_score():
@@ -32,13 +39,6 @@ class BowlingPins:
     def add_score(self):
         return self.pins
 
-class Roll:
-    def __init__(self, roll_score):
-        self.roll_score = roll_score
-    
-    def get_score(self):
-        return self.roll_score
-
 class Spare:
     @staticmethod
     def add_score():
@@ -47,14 +47,7 @@ class Spare:
 class Strike:
     @staticmethod
     def add_score():
-        return 0
-
-
-
-
-
-
-
+        return 10
 
 
 
